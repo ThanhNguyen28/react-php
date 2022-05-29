@@ -12,6 +12,8 @@ function Pay() {
     useEffect(()=>{
       var sum = 0
       cart.forEach(element => {
+          element.product.discount > 0 ?
+          sum = Number(sum) + (element.quantity*element.product.discount) :
           sum = Number(sum) + (element.quantity*element.product.price)
           return sum    
       });
@@ -40,8 +42,13 @@ function Pay() {
             postApi("order/create",order).then(res => {
 
                 carts.forEach((item) => {
-
-                    var order_detail={order_id:res.data,product_id:item.product.id,price:item.product.price,quantity:item.quantity,date:date,note:item.size,status:0}
+                    var order_detail={order_id:res.data,
+                        product_id:item.product.id,
+                        price:item.product.discount ? item.product.discount : item.product.price,
+                        quantity:item.quantity,
+                        date:date,
+                        note:item.size,
+                        status:0}
                     postApi("order-detail/create",order_detail)
                     return order_detail
                 });
@@ -57,12 +64,12 @@ function Pay() {
     return ( 
     <div className="container" style={styles.container}>
         <div className="row" style={styles.row}>
-            <div className="col-lg-8">
-                <div className="mb-6">
+            <div className="col-lg-6">
+                <div className="mb-12">
                     <h4 className="font-weight-semi-bold mb-4">Passenger information</h4>
                     <div className="row">
                         <form onSubmit={(event)=>handleSubmit(event)}>
-                        <div className="col-md-6 form-group">
+                        <div className="col-md-12 form-group">
                             <label>Name</label>
                             <input className="form-control" 
                               type="text" 
@@ -70,28 +77,28 @@ function Pay() {
                               name="name" 
                               placeholder="Enter name" required/>
                         </div>
-                        <div className="col-md-6 form-group">
+                        <div className="col-md-12 form-group">
                             <label>E-mail</label>
                             <input className="form-control" 
                               type="email" name="email" 
                               onChange={(event)=>onChange(event)} 
                               placeholder="...@email.com" required/>
                         </div>
-                        <div className="col-md-6 form-group">
+                        <div className="col-md-12 form-group">
                             <label>Phone</label>
                             <input className="form-control" 
                                type="number" name="phone" 
                                onChange={(event)=>onChange(event)} 
                                placeholder="+84" required/>
                         </div>
-                        <div className="col-md-6 form-group">
+                        <div className="col-md-12 form-group">
                             <label>Address</label>
                             <input className="form-control" 
                                type="text" name="address" 
                                onChange={(event)=>onChange(event)} 
                                placeholder="Enter address" required/>
                         </div>
-                        <div className="col-md-6 form-group">
+                        <div className="col-md-12 form-group">
                             <button type="submit" className="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3">
                                 Place Order
                             </button>
@@ -100,7 +107,7 @@ function Pay() {
                     </div>
                 </div>
             </div>
-            <div className="col-lg-4">
+            <div className="col-lg-6">
                 <div className="card border-secondary mb-5">
                     <div className="card-header bg-secondary border-0">
                         <h4 className="font-weight-semi-bold m-0">Order Total</h4>
@@ -112,7 +119,7 @@ function Pay() {
                         return (
                         <div className="d-flex justify-content-between" key={index}>
                             <p>{item.product.name}</p>
-                            <p>{item.quantity} - {formatPrice.format(item.product.price)}</p>
+                            <p>{item.quantity} - { item.product.discount > 0 ? formatPrice.format(item.product.discount): formatPrice.format(item.product.price)}</p>
                         </div>
                         )
                       })

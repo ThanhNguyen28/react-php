@@ -22,7 +22,7 @@ function Items(props) {
               <td className="align-middle">
                   <img src={url+item.product.picture} style={{'width':"50px"}} alt={item.product.picture}/>
               </td>
-              <td className="align-middle">{formatPrice.format(item.product.price)}</td>
+              <td className="align-middle">{item.product.discount > 0 ? formatPrice.format(item.product.discount) : formatPrice.format(item.product.price)}</td>
               <td className="align-middle">
                   <div className="input-group quantity mx-auto" style={{'width':"100px"}}>
                       <div className="input-group-btn">

@@ -83,7 +83,12 @@ function ProductDetail() {
               {/* <small className="pt-1">{(50 Reviews)}</small> */}
             </div>
             <h3 className="font-weight-semi-bold mb-4">
-              {formatPrice.format(product.price)}
+            {product.discount > 0 ? 
+            <h3 className="font-weight-semi-bold mb-4">{formatPrice.format(product.discount)}</h3>
+              :<h3 className="font-weight-semi-bold mb-4">{formatPrice.format(product.price)}</h3>} 
+              {product.discount > 0 &&
+              <h3 className="text-muted ml-2"><del>{formatPrice.format(product.price)}</del></h3>} 
+              
             </h3>
             <p className="mb-4">
             - Vận chuyển toàn quốc [ Kiểm Tra Hàng Trước Khi Thanh Toán ]<br/>
