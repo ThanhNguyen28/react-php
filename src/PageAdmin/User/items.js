@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
 
 function ItemUser(props) {
+    
     const {data,handleDelete,handleUpdateStatus}= props
-    // const data = props.data
-    // const handleDelete = props.handleDelete
-    // const handleUpdateStatus = props.handleUpdateStatus
+
     const url = "/admin/user/update/"
     return (
         data && data.length > 0 ? // Câu điều kiện if

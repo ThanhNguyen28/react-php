@@ -2,38 +2,30 @@ import {useDispatch} from 'react-redux'
 import { useState} from 'react'
 
 import * as ACTIONS from '../../store/actions/index'
-import { postApi ,getApi} from '../../Api/api'
 function Search() {
+ /* ========================== KEY ========================== */
+    const [keywords, setKeywords] = useState('');
+/* ========================== DISPATCH ========================== */
     const dispatch = useDispatch();
-    const [key, setKey] = useState('');
 /* ========================== CHANGE INPUT ========================== */  
     const onChange = (event) => {
         var search = event.target.value;
-        setKey(search);
+        setKeywords(search);
         var formData =new FormData();
-        formData.append('key',search)
-        postApi('product/search',formData).then((res)=>{
-            dispatch(ACTIONS.searchProduct(res.data));
-        })
-        if(search===''){
-            getApi("product/index").then((res)=>{
-                dispatch(ACTIONS.getProduct(res.data))
-            })
+        formData.append('keywords',search);
+        dispatch(ACTIONS.searchProduct(formData));
+        if(search===""){
+            dispatch(ACTIONS.getProduct());
         }
     }
 /* ========================== SUBMIT ========================== */ 
     const handleSubmit = (event) => {
         event.preventDefault(); // chặn chuyển trang
-        var formData =new FormData();
-        formData.append('key',key)
-         postApi('product/search',formData).then((res)=>{
-             dispatch(ACTIONS.searchProduct(res.data));
-         })
-        setKey('');
-        if(key===''){
-            getApi("product/index").then((res)=>{
-                dispatch(ACTIONS.getProduct(res.data))
-            })
+        if(keywords){
+           var formData =new FormData();
+           formData.append('keywords',keywords);
+           dispatch(ACTIONS.searchProduct(formData));
+           setKeywords('');
         }
     }
     return ( 

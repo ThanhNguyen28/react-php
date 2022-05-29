@@ -2,7 +2,7 @@ import React,{useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import { putApi } from '../../Api/api';
 const ModalOrder = (props) => {
-  const {id,handleStatusa} = props
+  const {id,handleStatusSize} = props
   const [status, setStatus] = useState();
   var navigate = useNavigate();
  /* ======================== Select ======================== */
@@ -14,7 +14,7 @@ const ModalOrder = (props) => {
   const handleSubmit = (event) => {
     event.preventDefault(); // chặn chuyển trang
     putApi(`order/update/?id=${id}`,{status:status}).then((res)=>{
-      res.status===200 &&
+      res &&
       alert("Lưu Thành Công");
       navigate("/admin/order", { replace: true });
    })
@@ -39,7 +39,7 @@ const ModalOrder = (props) => {
                 </select>
             </div>
             <div className="col-12"  style={{'textAlign':'center'}}>     
-              <button type="submit" onClick={()=>handleStatusa()} className="btn btn-outline-danger">Save</button>     
+              <button type="submit" onClick={()=>handleStatusSize()} className="btn btn-outline-danger">Save</button>     
             </div>
           </form> 
         </div>

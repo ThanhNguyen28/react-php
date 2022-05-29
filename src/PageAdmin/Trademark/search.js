@@ -1,36 +1,31 @@
 import { useState } from "react";
-import {useDispatch} from 'react-redux'
-import { postApi,getApi } from '../../Api/api'
+import {useDispatch} from "react-redux"
 import * as ACTIONS from "../../store/actions/index"
 function Search() {
 /* ========================== KEY ========================== */
-    const [key, setKey] = useState('');
+    const [keywords, setKeywords] = useState('');
 /* ========================== DISPATCH ========================== */
     const dispatch = useDispatch();
 /* ========================== CHANGE INPUT ========================== */  
     const onChange = (event) => {
         var search = event.target.value;
-        setKey(search);
+        setKeywords(search);
         var formData =new FormData();
-        formData.append('key',search)
-         postApi('trademark/search',formData).then((res)=>{
-             dispatch(ACTIONS.searchTrademark(res.data));
-         })
+        formData.append('keywords',search);
+        dispatch(ACTIONS.searchTrademark(formData));
          if(search===''){
-            getApi("trademark/index").then( (response) => {
-                dispatch(ACTIONS.getTrademark(response.data))
-              })
+            dispatch(ACTIONS.getTrademark());
          }
     }
 /* ========================== SUBMIT ========================== */ 
     const handleSubmit = (event) => {
         event.preventDefault(); // chặn chuyển trang
-        var formData =new FormData();
-        formData.append('key',key)
-         postApi('trademark/search',formData).then((res)=>{
-             dispatch(ACTIONS.searchTrademark(res.data));
-         })
-        setKey('');
+        if(setKeywords){
+            var formData =new FormData();
+            formData.append('keywords',keywords);
+            dispatch(ACTIONS.searchTrademark(formData));
+            setKeywords('');
+        }
     }
     return ( 
     <form onSubmit={(event)=>handleSubmit(event)} className="row g-3" style={styles.form}>

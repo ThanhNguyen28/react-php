@@ -10,7 +10,7 @@ function Modal(props) {
 //   const dispatch = useDispatch();
   useEffect(() => {
     getApi(`product-size/?id=${id}`).then((res) =>{
-      setArraySize(res.data)
+      setArraySize(res)
     })
   }, [id]);
 

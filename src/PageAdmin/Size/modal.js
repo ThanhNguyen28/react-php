@@ -1,13 +1,12 @@
 import React,{useState} from 'react'
 import {useDispatch} from 'react-redux'
-import * as ACTIONS from "../../store/actions/index"
-import { postApi } from '../../Api/api'
+import * as ACTIONS from '../../store/actions/index'
 const ModelSize = () => {
 
   const dispatch = useDispatch();
   const [inputs, setInputs] = useState('');
  
-/* lấy giá trị input đưa vào setInputs */
+/* GET input đưa vào setInputs */
   const onChange = (event) => {
     setInputs(event.target.value);
   }
@@ -16,7 +15,6 @@ const ModelSize = () => {
     event.preventDefault(); // chặn chuyển trang
     var data= {name:inputs}
     inputs &&
-    postApi('size/create',data)
     dispatch(ACTIONS.createSize(data)) // store/actions/index
     setInputs('');
   }
@@ -26,7 +24,7 @@ return(
     <div className="modal-dialog">
       <div className="modal-content">
         <div className="modal-header">
-          <h5 className="modal-title text-center" id="staticBackdropLabel">Create The Group </h5>
+          <h5 className="modal-title text-center" id="staticBackdropLabel">Create Size </h5>
           <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
         </div>
         <div className="modal-body">

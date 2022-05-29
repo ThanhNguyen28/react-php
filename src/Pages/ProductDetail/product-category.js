@@ -12,7 +12,7 @@ function ProductCategory(props) {
     useEffect(()=>{
       id.id > 0 &&
       getApi(`product/product-category/?id=${id.id}`).then((res)=>{
-          setProducts(res.data);
+          setProducts(res);
       })
     },[id.id])
 /* ============================ ADD CART ============================ */

@@ -1,65 +1,43 @@
 import React,{useEffect,useState} from 'react'
-
 import {useSelector,useDispatch} from 'react-redux'
-import * as ACTIONS from "../../store/actions/index"
+import * as ACTIONS from '../../store/actions/index'
 import ItemProduct from '../Product/items'
-import { deleteApi, getApi, putApi } from '../../Api/api'
 import { Link } from 'react-router-dom'
 import Search from './search'
-import {pageNumber} from "../../hooks/index"
 import Size from './size'
-import Page from '../../hooks/page'
+import { Pages } from '../../hooks/pages'
+import { deleteApi } from '../../Api/api'
+
 function Product() {
 /* ================================== PRODUCT GET STORE ================================== */ 
     const product= useSelector((state) => state.product);
     const dispatch = useDispatch();
-
-/* ================================== PAGENUMBER ================================== */ 
-    const pageNb= pageNumber(product,10); 
-
-/* ================================== PAGE ================================== */ 
-    const [currentPage,setCurrentPage] = useState(1); //trang hiện tại
-    const data = Page(product,currentPage);
+    const [id,setId] = useState();
+/* ================ GET PAGE ================ */
+    const {data,page} = Pages(product);
 
 /* ================================== LOADING PRODUCT ================================== */
     useEffect(() => {
-        getApi("product/index").then((res)=>{
-            dispatch(ACTIONS.getProduct(res.data))
-        })
-    },[dispatch]) // thay đổi khi moi lan dispatch
+        dispatch(ACTIONS.getProduct())
+    },[dispatch]) 
+    // thay đổi khi moi lan dispatch
 /* ================================== LOADING PRODUCT ================================== */
+
 /* ================ UPDATE STATUS ================ */
     const handleUpdateStatus = (id,status) =>{
         status===1 ? status=0 :  status=1 // Câu điều kiện if
-        putApi(`product/update/?id=${id}`,{status:status}).then(function (response) {
-            dispatch(ACTIONS.updateStatusProduct([{status:status},{id:id}]))// store/actions/index 
-        }) 
+        dispatch(ACTIONS.updateStatusProduct({status:status},id))// store/actions/index  
     }
 /* ================ UPDATE STATUS ================ */
+
 /* ================ DELETE ================ */
     const handleDelete = (id) => {
         if(window.confirm("Bạn có chắc trắng muốn xóa ")){ 
-            deleteApi(`product/delete/?id=${id}`).then(function (response) {
-                dispatch(ACTIONS.deleteProduct(id))
-              })
+            dispatch(ACTIONS.deleteProduct(id))
+            deleteApi(`product-size/delete/?id=${id}`);
         }
     } 
 /* ================ DELETE ================ */
-/* ================ CHANGE PAGE ================ */
-    const handlePage = (i) => {
-       setCurrentPage(i)
-    }
-/* ===================== Lùi ===================== */
-    const handlePrev = () => {
-        currentPage > 1 &&
-        setCurrentPage(currentPage-1)
-    }
-/* ===================== Tời ===================== */
-    const handleNext = () => {
-        currentPage < pageNb.length &&
-        setCurrentPage(currentPage+1)
-    }
-/* ================ CHANGE PAGE ================ */
 
 /* ================ OPPOSITE : ĐẢO NGƯỢC ================ */
     const handleOpposite = () => {
@@ -68,7 +46,6 @@ function Product() {
 /* ================ OPPOSITE : ĐẢO NGƯỢC ================ */
 
 /* ================ SHOW SIZE ================ */
-    const [id,setId] = useState();
     const handleSize = (id) => {
        setId(id);
     }
@@ -110,17 +87,7 @@ return (
                         data={data ? data : product}/>
             </tbody>
         </table>
-        <nav aria-label="Page navigation example">
-            <ul className="pagination justify-content-center">
-            <button className="btn btn-outline-dark" onClick={()=>handlePrev()}>Previous</button>
-            {pageNb && pageNb.map((i,index)=>{
-                return <li key={index} className="page-item">
-                        <button className="btn btn-outline-dark" onClick={()=>handlePage(i)}>{i}</button>
-                        </li>}) 
-            }
-            <button className="btn btn-outline-dark" onClick={()=>handleNext()}>Next</button>
-            </ul>
-        </nav>
+        {page}
         <Size id={id} />
     </div>
 </div>

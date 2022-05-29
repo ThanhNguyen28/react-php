@@ -1,7 +1,6 @@
 import React,{useState} from 'react'
 import {useDispatch} from 'react-redux'
-import { postApi, putApi } from '../../Api/api';
-import * as ACTIONS from "../../store/actions/index";
+import * as ACTIONS from '../../store/actions/index';
 
 const ModalTrademark = (props) => {
 
@@ -12,26 +11,19 @@ const ModalTrademark = (props) => {
 
   const [inputs, setInputs] = useState('');
  
-  /* lấy giá trị input đưa vào setInputs */
-
+  /* get input đưa vào setInputs */
   const onChange = (event) => {
     setInputs(event.target.value);
   }
   
   /* Submit */
-
   const handleSubmit = (event) => {
     event.preventDefault(); // chặn chuyển trang
-    var data = {name:inputs,status:0}
+    var data = {name:inputs,status:1}
     if(id===0){
-      postApi('trademark/create',data).then(()=> {
-        dispatch(ACTIONS.createTrademark(data)) // store/actions/index 
-    })
+      dispatch(ACTIONS.createTrademark(data)) // store/actions/index 
     }else{
-      console.log(data);
-      putApi(`trademark/update/?id=${id}`,{name:inputs}).then(function (response) {
-      dispatch(ACTIONS.updateTrademark({name:inputs},id)) // store/actions/index 
-      })
+      dispatch(ACTIONS.updateTrademark({name:inputs},id))  // store/actions/index 
     }    
     setInputs('');
   }

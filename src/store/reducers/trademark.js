@@ -3,8 +3,9 @@ import {findIndex} from '../../hooks/index'
 
 const initialState =[]
 
-const reducerTrademark = (state = initialState, action) => {
  /* const type = action.type - dispatch({ type, data }) */
+const reducerTrademark = (state = initialState, action) => {
+
   const {type, payload} = action;  
   var temp=-1;
 
@@ -15,14 +16,13 @@ const reducerTrademark = (state = initialState, action) => {
       return [...state] 
 /* ========================= ADD ========================= */
     case types.ADD_TRADEMARK:
-      state.push(payload);
+      state.unshift(payload);
       return [...state]
 /* ========================= UPDATE STATUS ========================= */
     case types.UPDATE_STATUS_TRADEMARK: 
-       var id=action.payload[1].id
-       temp=findIndex(state,id)
+       temp=findIndex(state,action.id)
        if(temp!==-1){
-        state[temp].status=action.payload[0].status;
+        state[temp].status=payload.status;
        }
       return [...state]
 /* ========================= UPDATE ========================= */
@@ -36,12 +36,12 @@ const reducerTrademark = (state = initialState, action) => {
     case types.DELETE_TRADEMARK:     
       temp=findIndex(state,action.id)
       if(temp!==-1){
-         state.splice(temp,1); // // splice(start,number) number số phần tử sẽ bị lại bỏ tính tử vị trí chỉ mục start
+         state.splice(temp,1);   
       }
       return [...state]
 /* ========================= DOWN ========================= */
     case types.OPPOSITE_TRADEMARK:     
-      state.reverse(); // reverse() được dùng để đảo ngược thứ tự của các phần tử trong mảng.
+      state.reverse(); 
       return [...state]
 /* ============================= SEARCH TRADEMARK ============================= */
     case types.SEARCH_TRADEMARK:  
@@ -53,3 +53,9 @@ const reducerTrademark = (state = initialState, action) => {
   }
 }
 export default reducerTrademark;
+/* 
+unshift thêm vào cuối mảng
+splice(start,number) number số phần tử sẽ bị lại bỏ tính tử vị trí chỉ mục start
+...state : copy state
+reverse() được dùng để đảo ngược thứ tự của các phần tử trong mảng.
+*/

@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom"
-const url = "http://localhost:8080/shoe/backend/upload/"
+import { url } from "../../Api/api"
+
 const ItemProduct = (props)=>{
+
     const {data,handleDelete,handleUpdateStatus,handleSize} = props
 
 return (
@@ -41,6 +43,4 @@ return(
 );
 }
 export default ItemProduct;
-// const styles = {
-//     image: { maxWidth: "200px", maxHeight: "200px",borderRadius:"5px" }
-//   };
+

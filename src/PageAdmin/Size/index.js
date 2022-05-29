@@ -1,54 +1,34 @@
-import React,{useEffect, useState} from 'react'
+import React,{useEffect} from 'react'
 import {useSelector,useDispatch} from 'react-redux'
 
 import * as ACTIONS from "../../store/actions/index"
 import ItemSize from "./items"
-import {pageNumber} from "../../hooks/index"
-import { deleteApi, getApi } from '../../Api/api'
 import Search from './search'
 import ModelSize from './modal'
-import Page from '../../hooks/page'
+import {Pages} from '../../hooks/pages'
+
 function Size() {
-/* ================================== THE GROUP GET STORE ================================== */ 
-    const size= useSelector((state) => state.size);
+/* ================================== SIZE GET STORE ================================== */ 
+    const size = useSelector((state) => state.size);
     const dispatch = useDispatch();
-/* ================================== PAGENUMBER ================================== */ 
-    const pageNb= pageNumber(size,10); 
-/* ================================== PAGE ================================== */ 
-    const [currentPage,setCurrentPage] = useState(1); //trang hiện tại
-    const data = Page(size,currentPage);
-/* ================ LOADING THE GROUP ================ */
+    
+/* ================ GET PAGE ================ */
+    const {data,page} = Pages(size);
+
+/* ================ LOADING SIZE ================ */
     useEffect(() => {
-        getApi("size/index").then((res)=>{
-            dispatch(ACTIONS.getSize(res.data));
-        })
-    },[dispatch]) /* Load lai khi thuc hien dispatch *
-/* ================ LOADING THE GROUP ================ */
+        dispatch(ACTIONS.getSize());
+    },[dispatch]) /* Loading lai khi thuc hien dispatch *
+/* ================ LOADING SIZE ================ */
+
 /* ================ DELETE ================ */
     const handleDelete = (id) => {
         if(window.confirm("Bạn có chắc trắng muốn xóa ")){ 
-            deleteApi(`size/delete/?id=${id}`).then((res)=>{
-                dispatch(ACTIONS.deleteSize(id)); // store/actions/index
-            })
+            dispatch(ACTIONS.deleteSize(id)); // store/actions/index
         }
     } 
 /* ================ DELETE ================ */
 
-/* ================ CHANGE PAGE ================ */
-    const handlePage = (i) => {
-        setCurrentPage(i)
-    }
-/* ================ Lùi ================ */
-    const handlePrev = () => {
-        currentPage > 1 &&
-        setCurrentPage(currentPage-1)
-    }
-/* ================ tời ================ */
-    const handleNext = () => {
-        currentPage < pageNb.length &&
-        setCurrentPage(currentPage+1)
-    }
-/* ================ CHANGE PAGE ================ */
 /* ================ OPPOSITE : ĐẢO NGƯỢC ================ */
    const handleOpposite = () => {
     dispatch(ACTIONS.oppositeSize())
@@ -58,7 +38,7 @@ return (
 <div className="container" style={styles.container}>
     <div className="row">
         <div className="col-12 col-sm-12">
-            <h1 style={styles.title}>The Group</h1> 
+            <h1 style={styles.title}>Size</h1> 
         </div>
         <div>
             <button className="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modals">
@@ -71,7 +51,7 @@ return (
             <thead>
             <tr>
                 <th><i className="bi bi-arrow-down-up" onClick={()=>handleOpposite()} style={styles.opposite} ></i>
-                    STT
+                    ID
                 </th>
                 <th>Name</th>
                 <th>Delete</th>
@@ -83,18 +63,7 @@ return (
                     data={data ? data : size} />
             </tbody>
         </table>
-        <nav aria-label="Page navigation example">
-            <ul className="pagination justify-content-center">
-            <button className="btn btn-outline-dark" onClick={()=>handlePrev()}>Previous</button>
-            {pageNb && pageNb.map((i,index)=>{
-            return <li key={index} className="page-item">
-                    <button className="btn btn-outline-dark" onClick={()=>handlePage(i)}>{i}</button>
-                    </li>
-            }) 
-            }
-            <button className="btn btn-outline-dark" onClick={()=>handleNext()}>Next</button>
-            </ul>
-        </nav>
+         {page}
     </div>
 </div>
 );

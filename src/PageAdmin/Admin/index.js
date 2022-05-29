@@ -15,10 +15,10 @@ function Admin() {
     }
     const handleStatistics = () => {
         postApi(`order/statistics`,{begin:begin,end:end}).then((res)=>{
-            res.data.forEach(item => {
+            res.forEach(item => {
                 setTotal(item.total);
             });
-            setOrders(res.data);
+            setOrders(res);
         })
     }
 return ( 

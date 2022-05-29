@@ -9,6 +9,7 @@ export const SEARCH_PRODUCT='SEARCH_PRODUCT';
 export const GET_BY_PRODUCT='GET_BY_PRODUCT'; 
 export const PAGE_PRODUCT='PAGE_PRODUCT'; 
 export const PRICE_PRODUCT='PRICE_PRODUCT';
+export const CATEGORY_PRODUCT='CATEGORY_PRODUCT';
 /* ===== ACTON CATEGORY ===== */
 export const FETCH_CATEGORY='FETCH_CATEGORY';
 export const ADD_CATEGORY='ADD_CATEGORY';
@@ -48,6 +49,8 @@ export const ADD_CART= 'ADD_CART';
 export const DELETE_CART= 'DELETE_CART';
 export const UPDATE_CART= 'UPDATE_CART';
 export const UPDATE_CART_SIZE='UPDATE_CART_SIZE';
+export const DELETE_CART_ALL='DELETE_CART_ALL';
 /* ===== ACTON ORDER ===== */
 export const FETCH_ORDER= 'FETCH_ORDER';
+export const ADD_ORDER='ADD_ORDER';
 export const OPPOSITE_ORDER= 'OPPOSITE_ORDER';

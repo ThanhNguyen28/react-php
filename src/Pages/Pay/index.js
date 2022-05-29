@@ -1,13 +1,18 @@
-import React, { useEffect,useState } from 'react';
-import {useSelector} from 'react-redux'
+import React, { useEffect,useState } from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import {useNavigate} from 'react-router-dom'
 import {postApi} from '../../Api/api'
 import {formatPrice} from '../../hooks/index'
+import * as ACTIONS from '../../store/actions/index'
+
 function Pay() {
 
     const cart= useSelector((state) => state.cart);
+    const dispatch = useDispatch();
     const [carts, setCarts] = useState([]);
     const [total, setTotal] = useState(0);
     const [inputs, setInputs] = useState({});
+    let navigate = useNavigate();
 /* ================================= tính tổng đơn hàng ================================= */
     useEffect(()=>{
       var sum = 0
@@ -33,31 +38,36 @@ function Pay() {
     const handleSubmit = (event) => {
         event.preventDefault();
         var curDate = new Date();
-        var date = curDate.getFullYear() + "-" + (curDate.getMonth() + 1) + "-" + curDate.getDate()
+        var date = curDate.getFullYear() + "-" + (curDate.getMonth() + 1) + "-" + curDate.getDate();
+        var hours = curDate.getHours() + ":" + (curDate.getMinutes() + 1) +":"+curDate.getSeconds();
         if(carts && carts.length > 0) {       
         var customer = {name:inputs.name,phone:inputs.phone,address:inputs.address,email:inputs.email,status:0}
         postApi("customer/create",customer).then(res => {
 
-            var order = {customer_id:res.data,total_money:total,date:date,status:0}
+            var order = {customer_id:res,total_money:total,date:date,status:0}
+            dispatch(ACTIONS.createOrder(order));
             postApi("order/create",order).then(res => {
-
+            
                 carts.forEach((item) => {
-                    var order_detail={order_id:res.data,
+                    var order_detail={order_id:res,
                         product_id:item.product.id,
-                        price:item.product.discount ? item.product.discount : item.product.price,
+                        price:item.product.discount > 0 ? item.product.discount : item.product.price,
                         quantity:item.quantity,
-                        date:date,
+                        date:hours,
                         note:item.size,
                         status:0}
                     postApi("order-detail/create",order_detail)
-                    return order_detail
+                    return ;
                 });
             })
         })
         localStorage.removeItem('CART');
-           alert("Đặt hàng thành công")
+        dispatch(ACTIONS.deleteCartAll());
+        setCarts("");
+        alert("Đặt hàng thành công");
+        navigate("/", { replace: true });
         }else{
-            alert("Đặt hàng thất bại")
+            alert("Đặt hàng thất bại");
         }
     }
 /* ================================= Submit ================================= */

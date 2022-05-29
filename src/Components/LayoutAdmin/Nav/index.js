@@ -7,7 +7,7 @@ function Nav() {
   useEffect(() => {
     const items = JSON.parse(localStorage.getItem('LOGIN'))
     if(items){
-      setItems(items[0])
+      setItems(items)
     }
   }, []);
   const handleLogout = () => {

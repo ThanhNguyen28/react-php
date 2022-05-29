@@ -18,9 +18,7 @@ function ProductDetail() {
 /* ======================================== PRODUCT DETAIL ======================================== */ 
     useEffect(()=>{
       getApi(`product/product-detail/?id=${id}`).then((res)=>{
-        res.data.forEach(item => {
-          setProduct(item);
-        });
+        setProduct(res);
       })
     },[id])
 /* ======================================== GIẢM ======================================== */
@@ -44,7 +42,7 @@ function ProductDetail() {
 /* ======================================== LOADING SIZE ======================================== */
     useEffect(() => {
         getApi(`product-size/?id=${id}`).then((res) =>{
-          setArraySize(res.data)
+          setArraySize(res)
           })
     }, [id]);
 /* ======================================== CHOOSE SIZE ======================================== */  
@@ -82,14 +80,12 @@ function ProductDetail() {
               </div>
               {/* <small className="pt-1">{(50 Reviews)}</small> */}
             </div>
-            <h3 className="font-weight-semi-bold mb-4">
             {product.discount > 0 ? 
             <h3 className="font-weight-semi-bold mb-4">{formatPrice.format(product.discount)}</h3>
               :<h3 className="font-weight-semi-bold mb-4">{formatPrice.format(product.price)}</h3>} 
               {product.discount > 0 &&
               <h3 className="text-muted ml-2"><del>{formatPrice.format(product.price)}</del></h3>} 
               
-            </h3>
             <p className="mb-4">
             - Vận chuyển toàn quốc [ Kiểm Tra Hàng Trước Khi Thanh Toán ]<br/>
 

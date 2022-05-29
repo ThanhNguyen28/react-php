@@ -17,7 +17,7 @@ function Size(props) {
 /* ============================== ARRAY SIZE ============================== */
     useEffect(() => {
         getApi("size/index").then((res)=>{
-            setArraySize(res.data)
+            setArraySize(res)
           });
     }, []);
 /* ============================== ARRAY SIZE ============================== */
@@ -26,7 +26,7 @@ const [arraySizes,setArraySizes]=useState();
   useEffect(() => {
     id &&
     getApi(`product-size/?id=${id}`).then((res) =>{
-      setArraySizes(res.data)
+      setArraySizes(res)
     })
   }, [id]);
 
@@ -53,7 +53,7 @@ const [arraySizes,setArraySizes]=useState();
 /* ============================== SUBMIT ============================== */
     const handleSubmit = (event) => {
       event.preventDefault();
-      if(id>0 && sizes && sizes.length >0 ){
+      if(id>0 && sizes){
         deleteApi(`product-size/delete/?id=${id}`);
         sizes.map(item =>{
            postApi("product-size/create",{product_id:id,size:item})
@@ -61,8 +61,9 @@ const [arraySizes,setArraySizes]=useState();
         })
         alert("Lưu Thành Công");
         getApi(`product-size/?id=${id}`).then((res) =>{
-          setArraySizes(res.data)
+          setArraySizes(res)
         })
+        setStatus(true)
       }else{
         alert("Lưu Thất Bại");
       }

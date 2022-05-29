@@ -1,54 +1,121 @@
-// import { getApi } from "../../Api/api";
+import { getApi, postApi, putApi, deleteApi } from "../../Api/api";
 import * as Types from "../type/index"
 
-// dispatch la 1 ham
 /* ============================================ PRODUCT ============================================ */
-export const getProduct = (data) => {
-    return (dispatch) => { dispatch({ type: Types.FETCH_PRODUCT,payload: data}) }
+
+/* get all product */
+export const getProduct = () => {
+    return (dispatch) => {
+        getApi("product/index").then((result) =>{
+          return dispatch({ type: Types.FETCH_PRODUCT, payload: result })
+        })
+    }
 };
+/* create product */
 export const createProduct = (data) => {
-    return (dispatch) => { dispatch({ type: Types.ADD_PRODUCT, payload:data}) }
+    return (dispatch) => { dispatch({ type: Types.ADD_PRODUCT, payload: data }) }
 };
+/* update product */
 export const updateProduct = (data,id) => {
-    return (dispatch) => { dispatch({ type: Types.UPDATE_PRODUCT, data,id}) }
+    return (dispatch) => {
+        putApi(`product/update/?id=${id}`,data)
+        return dispatch({ type: Types.UPDATE_PRODUCT, data, id })
+    }
 };
-export const updateStatusProduct = (payload) => {
-    return (dispatch) => { dispatch({ type: Types.UPDATE_STATUS_PRODUCT, payload}) }
+/* update status product */
+export const updateStatusProduct = (data,id) => {
+    return (dispatch) => {
+        putApi(`product/update/?id=${id}`,data)
+        return dispatch({ type: Types.UPDATE_STATUS_PRODUCT,payload: data, id })
+    }
 };
+/* delete product */
 export const deleteProduct= (id) => {
-    return (dispatch) => { dispatch({ type: Types.DELETE_PRODUCT, id}) }
+    return (dispatch) => {
+        deleteApi(`product/delete/?id=${id}`)
+        return dispatch({ type: Types.DELETE_PRODUCT, id })
+    }
 };
-export const searchProduct = (data) => {
-    return (dispatch) => { dispatch({ type: Types.SEARCH_PRODUCT, payload:data}) }
+/* search product */
+export const searchProduct = (keywords) => {
+    return (dispatch) => {
+        postApi('product/search',keywords).then((result) =>{
+            return dispatch({ type: Types.SEARCH_PRODUCT, payload: result })
+        })
+    }
 };
+/* opposite product */
 export const oppositeProduct = () => {
-    return (dispatch) => { dispatch({ type: Types.OPPOSITE_PRODUCT}) }
+    return (dispatch) => { dispatch({ type: Types.OPPOSITE_PRODUCT }) }
 };
+/* get price product */
 export const getPrice = (price) => {
-    return (dispatch) => { dispatch({ type: Types.PRICE_PRODUCT,payload:price}) }
+    return (dispatch) => {
+        postApi(`product/product-price/?id=${price}`).then((result) =>{
+          return dispatch({ type: Types.PRICE_PRODUCT, payload: result })
+        })
+    }
+};
+/* get product category */
+export const getProductCategory= (id) => {
+    return (dispatch) => {
+        getApi(`product/all-product-category/?id=${id}`).then((result)=>{
+            return dispatch({ type: Types.CATEGORY_PRODUCT, payload: result })
+        })
+    }
 };
 
 /* ============================================ PRODUCT ============================================ */
 
 /* ============================================ TRADEMARK ============================================ */
-export const getTrademark = (data) => {
-    return (dispatch) => { dispatch({ type: Types.FETCH_TRADEMARK,payload: data}) }
+
+/* get all trademark */
+export const getTrademark = () => {
+    return (dispatch) => {
+        getApi("trademark/index").then((result) =>{
+          return dispatch({ type: Types.FETCH_TRADEMARK, payload: result})
+        })
+    }
 };
+/* create trademark */
 export const createTrademark = (data) => {
-    return (dispatch) => { dispatch({ type: Types.ADD_TRADEMARK, payload:data}) }
+    return (dispatch) => {
+        postApi("trademark/create",data).then((result)=>{
+            let id = Number(result)
+            return dispatch({ type: Types.ADD_TRADEMARK, payload: {id:id,name:data.name,status:1}})
+        })
+    }
 };
+/* update trademark */
 export const updateTrademark = (data,id) => {
-    return (dispatch) => { dispatch({ type: Types.UPDATE_TRADEMARK, data,id}) }
+    return (dispatch) => {
+        putApi(`trademark/update/?id=${id}`,data)
+        return dispatch({ type: Types.UPDATE_TRADEMARK, data, id })
+    }
 };
-export const updateStatusTrademark = (payload) => {
-    return (dispatch) => { dispatch({ type: Types.UPDATE_STATUS_TRADEMARK, payload}) }
+/* update status trademark */
+export const updateStatusTrademark = (data,id) => {
+    return (dispatch) => {
+        putApi(`trademark/update/?id=${id}`,data)
+        return dispatch({ type: Types.UPDATE_STATUS_TRADEMARK, payload: data, id })
+    }
 };
+/* delete trademark */
 export const deleteTrademark = (id) => {
-    return (dispatch) => { dispatch({ type: Types.DELETE_TRADEMARK, id}) }
+    return (dispatch) => {
+        deleteApi(`trademark/delete/?id=${id}`)
+        return dispatch({ type: Types.DELETE_TRADEMARK, id })
+    }
 };
-export const searchTrademark = (data) => {
-    return (dispatch) => { dispatch({ type: Types.SEARCH_TRADEMARK, payload:data}) }
+/* search trademark */
+export const searchTrademark = (keywords) => {
+    return (dispatch) => {
+        postApi('trademark/search',keywords).then((result) =>{
+          return dispatch({ type: Types.SEARCH_TRADEMARK, payload: result })
+        })
+    }
 };
+/* opposite trademark */
 export const oppositeTrademark = () => {
     return (dispatch) => { dispatch({ type: Types.OPPOSITE_TRADEMARK}) }
 };
@@ -57,78 +124,94 @@ export const oppositeTrademark = () => {
 
 /* ============================================ USER ============================================ */
 
-export const getUser = (data) => {
-    return (dispatch) => { dispatch({ type: Types.FETCH_USER,payload: data}) }
+/* get all user */
+export const getUser = () => {
+    return (dispatch) => {
+        getApi("user/index").then((result) =>{
+          return dispatch({ type: Types.FETCH_USER, payload: result })
+        })
+    }
 };
+/* create user */
 export const createUser = (data) => {
-    return (dispatch) => { dispatch({ type: Types.ADD_USER, payload:data}) }
+    return (dispatch) => {
+        postApi("user/create",data)
+        return dispatch({ type: Types.ADD_USER, payload: data })
+    }
 };
+/* update user */
 export const updateUser = (data,id) => {
-    return (dispatch) => { dispatch({ type: Types.UPDATE_USER, data,id}) }
+    return (dispatch) => {
+        putApi(`user/update/?id=${id}`,data)
+        return dispatch({ type: Types.UPDATE_USER, data, id })
+    }
 };
-export const updateStatusUser = (payload) => {
-    return (dispatch) => { dispatch({ type: Types.UPDATE_STATUS_USER, payload}) }
+/* update status user */
+export const updateStatusUser = (data,id) => {
+    return (dispatch) => {
+        putApi(`user/update/?id=${id}`,data)
+        return dispatch({ type: Types.UPDATE_STATUS_USER, payload: data, id  })
+    }
 };
+/* delete user */
 export const deleteUser = (id) => {
-    return (dispatch) => { dispatch({ type: Types.DELETE_USER, id}) }
+    return (dispatch) => {
+        deleteApi(`user/delete/?id=${id}`)
+        return dispatch({ type: Types.DELETE_USER, id })
+    }
 };
-export const searchUser = (data) => {
-    return (dispatch) => { dispatch({ type: Types.SEARCH_USER, payload:data}) }
+/* search user */
+export const searchUser = (keywords) => {
+    return (dispatch) => {
+        postApi('user/search',keywords).then((result) =>{
+            return dispatch({ type: Types.SEARCH_USER, payload: result}) 
+        })
+    }
 };
+/* opposite user */
 export const oppositeUser = () => {
-    return (dispatch) => { dispatch({ type: Types.OPPOSITE_USER}) }
+    return (dispatch) => { dispatch({ type: Types.OPPOSITE_USER }) }
 };
 
 /* ============================================ USER ============================================ */
 
-
-
-/* ============================================ CATEGORY ============================================ */
-
-export const getCategory = (data) => {
-    return (dispatch) => { dispatch({ type: Types.FETCH_CATEGORY,payload: data}) }
-};
-export const createCategory = (data) => {
-    return (dispatch) => { dispatch({ type: Types.ADD_CATEGORY, payload:data}) }
-};
-export const updateCategory = (data,id) => {
-    return (dispatch) => { dispatch({ type: Types.UPDATE_CATEGORY, data,id}) }
-};
-export const updateStatusCategory = (payload) => {
-    return (dispatch) => { dispatch({ type: Types.UPDATE_STATUS_CATEGORY, payload}) }
-};
-export const deleteCategory = (id) => {
-    return (dispatch) => { dispatch({ type: Types.DELETE_CATEGORY, id}) }
-};
-export const getByCategory = (data) => {
-    return (dispatch) => { dispatch({ type: Types.GET_BY_CATEGORY, payload:data}) }
-};
-export const searchCategory = (data) => {
-    return (dispatch) => { dispatch({ type: Types.SEARCH_CATEGORY, payload:data}) }
-};
-export const oppositeCategory = () => {
-    return (dispatch) => { dispatch({ type: Types.OPPOSITE_CATEGORY}) }
-};
-
-/* ============================================ CATEGORY ============================================ */
-
 /* ============================================ SIZE ============================================ */
 
-export const getSize = (data) => {
-    return (dispatch) => { dispatch({ type: Types.FETCH_SIZE,payload: data}) }
+/* get all size */
+export const getSize = () => {
+    return (dispatch) => {
+        getApi("size/index").then((result) =>{
+          return dispatch({ type: Types.FETCH_SIZE, payload: result })
+        })
+    }
 };
+/* create size */
 export const createSize= (data) => {
-    return (dispatch) => { dispatch({ type: Types.ADD_SIZE, payload:data}) }
+    return (dispatch) => {
+        postApi("size/create", data).then((result)=>{
+            let id = Number(result)
+            return dispatch({ type: Types.ADD_SIZE, payload: {id:id,name:data.name} })
+        })
+    }
 };
-
+/* delete size */
 export const deleteSize = (id) => {
-    return (dispatch) => { dispatch({ type: Types.DELETE_SIZE, id}) }
+    return (dispatch) => {
+        deleteApi(`size/delete/?id=${id}`)
+        return dispatch({ type: Types.DELETE_SIZE, id })   
+    }
 };
-export const searchSize = (data) => {
-    return (dispatch) => { dispatch({ type: Types.SEARCH_SIZE, payload:data}) }
+/* search size */
+export const searchSize = (keywords) => {
+    return (dispatch) => {
+        postApi("size/search", keywords).then((result) =>{
+          return dispatch({ type: Types.SEARCH_SIZE, payload: result}) 
+        })
+    }
 };
+/* opposite size */
 export const oppositeSize = () => {
-    return (dispatch) => { dispatch({ type: Types.OPPOSITE_SIZE}) }
+    return (dispatch) => { dispatch({ type: Types.OPPOSITE_SIZE }) }
 };
 
 /* ============================================ SIZE ============================================ */
@@ -136,7 +219,7 @@ export const oppositeSize = () => {
 /* ============================================ CART ============================================ */
 
 export const addCart = (product,quantity,size) => {
-    return (dispatch) => { dispatch({ type: Types.ADD_CART, product, quantity,size }) }
+    return (dispatch) => { dispatch({ type: Types.ADD_CART, product, quantity, size }) }
 }
 
 export const deleteCart=(product)=>{
@@ -151,30 +234,51 @@ export const updateCartSize=(product,size)=>{
     return (dispatch) => { dispatch({ type: Types.UPDATE_CART_SIZE, product, size }) }
 }
 
+export const deleteCartAll = () => {
+    return (dispatch) => { dispatch({type: Types.DELETE_CART_ALL }) }
+}
+
 /* ============================================ CART ============================================ */
 /* ============================================ ORDER ============================================ */
 
-export const getOrder = (data) => {
-    return (dispatch) => { dispatch({ type: Types.FETCH_ORDER,payload: data}) }
+/* get all order */
+export const getOrder = () => {
+    return (dispatch) => {
+        getApi("order/index").then((result) =>{
+          return dispatch({ type: Types.FETCH_ORDER, payload: result })
+        })
+    }
 };
+/* create size */
+export const createOrder= (data) => {
+    return (dispatch) => {
+        dispatch({ type: Types.ADD_ORDER, payload: data })  
+    }
+};
+/* get order status */
+export const getOrderStatus = (value) => {
+    return (dispatch) => {
+        getApi(`order/status/?id=${value}`).then((result) => {
+          return dispatch({ type: Types.FETCH_ORDER, payload: result })
+        })
+    }
+};
+/* get order date */
+export const getOrderDate = (value) => {
+    return (dispatch) => {
+        getApi(`order/date/?id=${value}`).then((result) => {
+          return dispatch({ type: Types.FETCH_ORDER, payload: result })
+        })
+    }
+};
+/* opposite order */
 export const oppositeOrder = () => {
-    return (dispatch) => { dispatch({ type: Types.OPPOSITE_ORDER}) }
+    return (dispatch) => { dispatch({ type: Types.OPPOSITE_ORDER }) }
 };
 
 /* ============================================ ORDER ============================================ */
 
-// export const getSeachMovies = (keywords) => async dispatch => {
-//   try {    
-//     const result = await axios.get(
-//       `${BASE_URL}/search/multi?api_key=${API_KEY}&language=en-US&include_adult=false&query=${keywords}` 
-//     )
-//     dispatch({type: Types.GET_SEARCH_MOVIES, payload: result.data.results})
-//   } catch (error) {
-//     console.log("Get search movies error: ", error);
-//   }
-// }
 /*
-Các Action: Khi ta định nghĩa các action, ta khai báo các tên của hành động trong ứng dụng. 
-Lấy ví dụ ta có 1 state là counter và cần 2 phương thức để tăng và giảm giá trị của counter. 
-Lúc này ta định nghĩa 2 action có tên là 'tăng' và 'giảm' và chỉ vậy thôi
+ * Các Action: Khi ta định nghĩa các action, ta khai báo các tên của hành động trong ứng dụng. 
+ * dispatch la 1 ham
  */

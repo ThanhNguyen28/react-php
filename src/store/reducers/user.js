@@ -3,9 +3,12 @@ import {findIndex} from '../../hooks/index'
 
 const initialState =[]
 
-const reducerUser = (state = initialState, action) => {
  /* const type = action.type - dispatch({ type, data }) */
+
+const reducerUser = (state = initialState, action) => {
+  
   const {type,payload} = action;  
+
   var temp=-1;
   switch (type) {
 /* ========================= GET ALL ========================= */
@@ -18,10 +21,9 @@ const reducerUser = (state = initialState, action) => {
       return [...state]
 /* ========================= UPDATE STATUS ========================= */
     case types.UPDATE_STATUS_USER: 
-       var id=action.payload[1].id
-       temp=findIndex(state,id)
+       temp=findIndex(state,action.id)
        if(temp!==-1){
-        state[temp].status=action.payload[0].status;
+        state[temp].status=payload.status;
        }
        return [...state]
 /* ========================= UPDATE ========================= */
@@ -35,12 +37,12 @@ const reducerUser = (state = initialState, action) => {
     case types.DELETE_USER:     
       temp=findIndex(state,action.id)
       if(temp!==-1){
-         state.splice(temp,1); // splice(start,number) number số phần tử sẽ bị lại bỏ tính tử vị trí chỉ mục start
+         state.splice(temp,1);
       }
       return [...state]
 /* ========================= OPPOSITE ========================= */
     case types.OPPOSITE_USER:     
-      state.reverse(); // reverse() được dùng để đảo ngược thứ tự của các phần tử trong mảng.
+      state.reverse(); 
       return [...state]
 /* ============================= SEARCH USER ============================= */
     case types.SEARCH_USER:  
@@ -52,3 +54,9 @@ const reducerUser = (state = initialState, action) => {
   }
 }
 export default reducerUser
+/*
+unshift thêm vào cuối mảng
+splice(start,number) number số phần tử sẽ bị lại bỏ tính tử vị trí chỉ mục start
+...state : copy state
+reverse() được dùng để đảo ngược thứ tự của các phần tử trong mảng.
+*/

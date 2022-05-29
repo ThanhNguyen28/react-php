@@ -38,11 +38,10 @@ const publicRoutes =[
 ]
 
 /* ================================== ADMIN ==================================*/
-const login = localStorage.getItem('LOGIN') ;
 var privateRoutes=[]
-if(login){
+if(localStorage.getItem('LOGIN')){
     const items = JSON.parse(localStorage.getItem('LOGIN'))
-    items[0].power===1 ?
+    items.power===1 ?
  privateRoutes =[
     { path: '/admin', component: Admin },
     { path: '/admin/user', component: User },
@@ -57,7 +56,7 @@ if(login){
     { path: '/admin/order-detail/:id', component: OrderDetail },
     { path: '/admin/login', component: Login,layout:null }
 ]
-: items[0].power===2 ? 
+: items.power===2 ? 
 privateRoutes =[
     { path: '/admin', component: Admin },
     { path: '/admin/product', component: Product },

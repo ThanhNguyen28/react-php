@@ -4,49 +4,39 @@ import { useEffect,useState } from 'react';
 import Menu from "./menu";
 
 import * as ACTIONS from "../../../store/actions"
-import { postApi ,getApi} from "../../../Api/api"
 function Header() {
   
   const cart= useSelector((state) => state.cart);
   const [carts, setCarts] = useState([]);
   const dispatch = useDispatch();
 
-  const [key, setKey] = useState('');
+/* ========================== KEY ========================== */
+  const [keywords, setKeywords] = useState('');
 /* ======================= LOAD CART ======================= */
   useEffect(() => {
     setCarts(cart)
   }, [cart]);
+
 /* ========================== CHANGE INPUT ========================== */  
-    const onChange = (event) => {
+  const onChange = (event) => {
         var search = event.target.value;
-        setKey(search);
+        setKeywords(search);
         var formData =new FormData();
-        formData.append('key',search)
-        postApi('product/search',formData).then((res)=>{
-            dispatch(ACTIONS.searchProduct(res.data));
-        })
-        if(search===''){
-            getApi("product/index").then((res)=>{
-                dispatch(ACTIONS.getProduct(res.data))
-            })
+        formData.append('keywords',search);
+        dispatch(ACTIONS.searchProduct(formData));
+        if(search===""){
+            dispatch(ACTIONS.getProduct());
         }
     }
-    const handleSumit = (event) => {
-      event.preventDefault();
-      if(key){
-      var formData =new FormData();
-        formData.append('key',key)
-        postApi('product/search',formData).then((res)=>{
-            dispatch(ACTIONS.searchProduct(res.data));
-        })
-        
-        if(key===''){
-            getApi("product/index").then((res)=>{
-                dispatch(ACTIONS.getProduct(res.data))
-            })
+/* ========================== SUBMIT ========================== */ 
+  const handleSubmit = (event) => {
+        event.preventDefault(); // chặn chuyển trang
+        if(keywords){
+           var formData =new FormData();
+           formData.append('keywords',keywords);
+           dispatch(ACTIONS.searchProduct(formData));
+           setKeywords('');
         }
-      }
-      
     }
     return (  
         <div className="container">
@@ -57,7 +47,7 @@ function Header() {
               </Link>
             </div>
             <div className="col-lg-6 col-6 text-left">
-              <form onSubmit={(event)=>handleSumit(event)}>
+              <form onSubmit={(event)=>handleSubmit(event)}>
                 <div className="input-group">
                   <input type="text" className="form-control" onChange={(event)=>onChange(event)} placeholder="Search" />
                   <div className="input-group-append">

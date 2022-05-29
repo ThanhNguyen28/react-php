@@ -9,23 +9,19 @@ function OrderDetail() {
     const [order,setOrder] = useState();
     useEffect(() => {
         getApi(`order/?id=${id}`).then((res)=>{
-            res.data.forEach((item) => {
-                setOrder(item);
-              });
+          setOrder(res);
         })
     },[id]) 
 
     useEffect(() => {
        getApi(`customer/?id=${id}`).then((res) => {
-        res.data.forEach((item) => {
-            setCustomer(item);
-          });
+        setCustomer(res);
        })
     }, [id]);
     useEffect(() => {
         getApi(`order-detail/?id=${id}`).then((res) => {
-            setOrderDetail(res.data);
-           })
+            setOrderDetail(res);
+        })
     }, [id]);
    
 return ( 
@@ -63,7 +59,7 @@ return (
     <tr>
       <th scope="col">STT</th>
       <th scope="col">Product</th>
-      <th scope="col">Date</th>
+      <th scope="col">Times</th>
       <th scope="col">Size</th>
       <th scope="col">Quantity</th>
       <th scope="col">Price</th>

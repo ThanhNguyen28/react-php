@@ -1,30 +1,30 @@
 import { Link } from 'react-router-dom'
 import {useState} from 'react'
 import {useDispatch} from 'react-redux'
-import * as ACTIONS from "../../store/actions/index"
-import { postApi } from '../../Api/api';
+import * as ACTIONS from '../../store/actions/index'
 import md5 from 'md5'
+
 function CreateUser() {
 
     const [inputs, setInputs] = useState({});
-    const [message, setMessage] = useState();
     const dispatch = useDispatch();
     const [power, setPower] = useState();
-     // lấy giá trị input đưa vào setInputs
+
+    /* GET input đưa vào setInputs  */ 
     const onChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         setInputs(values => ({...values, [name]: value}))
     }
-    // lấy giá trị select 
+    /* GET select */ 
     const handlePower = (event) => {
         setPower(event.target.value)
     }
-        // Submit
+    /* SUBMIT */
     const handleSubmit = (event) => {
         event.preventDefault();
         var password=null;
-        inputs.password===inputs.pass ? password=inputs.password : setMessage("Password không khớp")
+        inputs.password===inputs.pass ? password=inputs.password : alert("Password không khớp")
         if(password!==null){
         const user = {name:inputs.name,
             password:md5(password),
@@ -34,11 +34,8 @@ function CreateUser() {
             power:power ? power : 1,
             status:1
         }  
-        postApi("user/create",user).then((response) => {
-            dispatch(ACTIONS.createUser(user))
-        })
+        dispatch(ACTIONS.createUser(user))
         setInputs({values: ''})
-        setMessage("")
         alert("Thêm Thành Công")
         }
         
@@ -60,6 +57,7 @@ function CreateUser() {
           <input type="text" 
             className="form-control" 
             name="name" 
+            value={inputs.name || ""}
             onChange={(event)=>onChange(event)} 
             placeholder="Enter Name" required/>
         </div>
@@ -68,6 +66,7 @@ function CreateUser() {
           <input type="email" 
             className="form-control" 
             name="email"
+            value={inputs.email || ""}
             onChange={(event)=>onChange(event)} 
             placeholder="Enter Email" required/>
         </div>
@@ -76,6 +75,7 @@ function CreateUser() {
           <input type="text" 
             className="form-control" 
             name="phone" 
+            value={inputs.phone || ""}
             onChange={(event)=>onChange(event)} 
             placeholder="Enter Phone" required/>
         </div>
@@ -84,6 +84,7 @@ function CreateUser() {
           <input type="text" 
             className="form-control" 
             name="address"
+            value={inputs.address || ""}
             onChange={(event)=>onChange(event)} 
             placeholder="Enter Address" required/>
         </div>
@@ -100,6 +101,7 @@ function CreateUser() {
           <input type="password" 
             className="form-control" 
             name="password"
+            value={inputs.password || ""}
             onChange={(event)=>onChange(event)} 
             required/>
         </div>
@@ -108,12 +110,12 @@ function CreateUser() {
           <input type="password"
             className="form-control" 
             name="pass" 
+            value={inputs.pass || ""}
             onChange={(event)=>onChange(event)} 
-            required/><p style={{"color":"red"}}>{message ? "" : message}</p>
+            required/>
         </div>
-        <div className="col-12"  style={{'textAlign':'center'}}>               
-            <button type="submit" className="btn btn-outline-danger">Save</button>   
-            <button type="reset" className="btn btn-outline-danger" style={styles.reset}>Reset</button>       
+        <div className="col-12"  style={{'textAlign':'center',"marginTop":"10px"}}>               
+            <button type="submit" className="btn btn-outline-danger">Save</button>        
         </div>
       </form>
       </div>
@@ -139,8 +141,5 @@ const styles={
     margin:"auto",
     with:"50%",
     marginTop:"10px"
-  },
-  reset:{
-    marginLeft:"10px"
   }
 }

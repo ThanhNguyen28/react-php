@@ -8,7 +8,7 @@ function Product() {
   
   useEffect(() => {
     getApi("product/product-new").then((res)=>{
-      setProductNew(res.data);
+      setProductNew(res);
     })
   }, [])
 return (

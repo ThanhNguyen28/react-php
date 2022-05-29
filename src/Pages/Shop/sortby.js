@@ -1,32 +1,27 @@
 import { useSelector, useDispatch } from "react-redux"
-import {useEffect} from 'react'
+import {useEffect} from "react"
 import * as ACTIONS from "../../store/actions/index"
-import { getApi } from '../../Api/api'
+
 function SortBy() {
-    const trademark= useSelector((state) => state.trademark);
+
+    const {trademark}= useSelector((state) => state);
     const dispatch = useDispatch();
 
 /* ======================== Loading trademark lần đầu return ======================== */
     useEffect(() => {
-        getApi("trademark/index").then(function (response) {
-          dispatch(ACTIONS.getTrademark(response.data))
-        })
+        dispatch(ACTIONS.getTrademark())
       },[dispatch])
     // get By Trademark
     const handleSelectTrademark = (event) => {
         var id = event.target.value;
         id > 0 &&
-        getApi(`product/all-product-category/?id=${id}`).then((res)=>{
-            dispatch(ACTIONS.getProduct(res.data)) 
-        });
+        dispatch(ACTIONS.getProductCategory(id)) 
     }
     // get Price
     const handleSelectPrice = (event) => {
         var price = event.target.value;
         price > 0 &&
-        getApi(`product/product-price/?id=${price}`).then((res)=>{
-            dispatch(ACTIONS.getProduct(res.data)) 
-        });
+        dispatch(ACTIONS.getPrice(price)) 
     }
     return ( 
         <>

@@ -1,22 +1,22 @@
 import { Link ,useParams} from 'react-router-dom'
 import React,{useState,useEffect} from 'react'
-import {useDispatch} from 'react-redux'
+import {useDispatch,useSelector} from 'react-redux'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
 import * as ACTIONS from "../../store/actions/index"
-import { postApi, getApi,postApiImg } from '../../Api/api'
+import { getApi,postApiImg } from '../../Api/api'
 
 const ProductUpdate = ()=>{
-/* Lấy id từ url */
+    /* Lấy id từ url */
     const id = useParams();
+    const {trademark} = useSelector((state) => state)
     const dispatch = useDispatch();
-/* Tạo State inputs = {} */
+    /* Tạo State inputs = {} */
     const [inputs, setInputs] = useState({});
      // id  Trademark
     const [trademarkID, setTrademarkID] = useState();
-     // TRADEMARK
-    const [trademark, setTrademark] = useState();
+    
      // Tạo State image
     const [image,setImage]=useState();
     // State showimage
@@ -26,33 +26,31 @@ const ProductUpdate = ()=>{
 
     useEffect(() => {
       getApi(`product/product-detail/?id=${id.id}`).then((res)=>{
-        setInputs(res.data[0]);
+        setInputs(res);
       })
     }, [id.id]);
 
-   // Loading trademark 
+   /* Loading trademark */ 
    useEffect(() => {
-      getApi("trademark/index").then((res)=>{
-        setTrademark(res.data)
-      });
+      dispatch(ACTIONS.getTrademark());
     },[dispatch]);
     
-     // get data Textarea
+     /* GET data Textarea */
     const handleTextarea = (event, editor) => {
       const data = editor.getData();
       setCkeditor(data);
     };
-    // lấy id trademark
+    /* GET id trademark */
     const getTrademarkID = (event) => {
         setTrademarkID(event.target.value);
     }
-    // lấy giá trị input đưa vào setInputs
+    /* GET input đưa vào setInputs */
     const onChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         setInputs(values => ({...values, [name]: value}))
     }
-    // get img
+    /* GET img */
     const uploadImage = (event) => {
       if(event.target.files && event.target.files.length > 0){
         setImage(event.target.files[0])
@@ -60,11 +58,11 @@ const ProductUpdate = ()=>{
       }
     }
 
-    // Submit
+    /* Submit */
     const handleSubmit = (event) => {
         event.preventDefault();
         var product
-        if(image && image.length > 0){
+        if(image){
             product = {trademark_id:trademarkID,
             name:inputs.name,
             price:inputs.price,
@@ -95,12 +93,10 @@ const ProductUpdate = ()=>{
               id:id.id}
           }
         }
-        postApi(`product/update/?id=${id.id}`,product).then((res)=>{
-          dispatch(ACTIONS.createProduct(product))
-          alert("Lưu Thành Công")
-        })   
-
+        dispatch(ACTIONS.updateProduct(product,id.id))
+        alert("Lưu Thành Công")
     }
+
     return (
         <div className="container" style={styles.container}>
         <div className="row">
@@ -136,7 +132,7 @@ const ProductUpdate = ()=>{
                     </div>
                     <div className="col-md-6">
                       <label className="form-label">Trademark</label>
-                        <select className="form-control" defaultValue={trademarkID}
+                        <select className="form-control" 
                            onChange={(event)=>getTrademarkID(event)}>
                             { trademark && trademark.length > 0 &&
                               trademark.map((item) => {

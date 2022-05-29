@@ -1,16 +1,13 @@
-
 const ItemTrademark = (props)=>{
+
     const {data,handleDelete,handleUpdate,handleUpdateStatus} = props
-    // const data = props.data
-    // const handleDelete = props.handleDelete
-    // const handleUpdate = props.handleUpdate
-    // const handleUpdateStatus = props.handleUpdateStatus
+
     return (
         data && data.length > 0 ? //cau dk
         data.map((item,index)=>{
             return(
             <tr key={index}>
-                <td>{index+1}</td>
+                <td>{item.id}</td>
                 <td>{item.name}</td>
                 <td>{item.status===1 ?
                     <button className='btn btn-outline-warning' onClick={()=>handleUpdateStatus(item.id,item.status)}>Lock</button> : 

@@ -51,6 +51,10 @@ var reducerCart =(state=initialState,action)=>{
                 }                              
                localStorage.setItem('CART',JSON.stringify(state));
                return [...state] 
+        case types.DELETE_CART_ALL: 
+               let arr=[]
+               state = arr
+               return [...state];
         default:
             return state;
     }   

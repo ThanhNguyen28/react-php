@@ -3,6 +3,7 @@ import { useNavigate  } from "react-router-dom"
 import { postApi } from '../../Api/api'
 import md5 from 'md5';
 function Login() {
+
     let navigate = useNavigate();
     const [inputs, setInputs] = useState({});
     
@@ -14,9 +15,9 @@ function Login() {
     const handleSubmit = (event) => {
        event.preventDefault()
        postApi("user/login",{email:inputs.email,password:md5(inputs.password)}).then((res)=>{
-           if(res.status===200 && res.data && res.data.length > 0){
-               localStorage.setItem('LOGIN', JSON.stringify(res.data));
-               navigate("/admin", { replace: true });
+           if(res){
+             localStorage.setItem('LOGIN', JSON.stringify(res));
+             navigate("/admin", { replace: true });
            }else{
                alert("Login Thất Bại");
            }

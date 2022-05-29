@@ -1,61 +1,39 @@
-import React,{useEffect,useState} from 'react'
+import React,{useEffect} from 'react'
 import { Link } from 'react-router-dom'
-import { deleteApi, getApi, putApi } from '../../Api/api'
 import {useSelector,useDispatch} from 'react-redux'
-import ItemUser from "./items"
-import * as ACTIONS from "../../store/actions/index";
+import ItemUser from './items'
+import * as ACTIONS from '../../store/actions/index'
 import Search from './search'
-import {pageNumber} from "../../hooks/index"
-import Page from '../../hooks/page'
+import { Pages } from '../../hooks/pages'
+
 const User = () => {
 /* ================ USER ================ */
     const user= useSelector((state) => state.user);
     const dispatch = useDispatch();
-/* ================================== PAGENUMBER ================================== */ 
-    const pageNb= pageNumber(user,10); 
-/* ================================== PAGE ================================== */ 
-    const [currentPage,setCurrentPage] = useState(1); //trang hiện tại
-    const data = Page(user,currentPage);
+/* ================ GET PAGE ================ */
+    const {data,page} = Pages(user);
 /* ================ LOADING USER ================ */
     useEffect(() => {
-       getApi("user/index").then(function (response) {
-        dispatch(ACTIONS.getUser(response.data))
-      })
-    },[dispatch]) /* Load lai khi thuc hien dispatch */
+        dispatch(ACTIONS.getUser())
+    },[dispatch]) 
+    /* Load lai khi thuc hien dispatch */
 /* ================ LOADING USER ================ */
+
 /* ================ UPDATE STATUS ================ */
     const handleUpdateStatus = (id,status) =>{
         status===1 ? status=0 :  status=1 // Câu điều kiện if
-        putApi(`user/update/?id=${id}`,{status:status}).then(function (response) {
-            // store/actions/index 
-            dispatch(ACTIONS.updateStatusUser([{status:status},{id:id}]))
-        }) 
+        dispatch(ACTIONS.updateStatusUser({status:status},id))
     }
 /* ================ UPDATE STATUS ================ */
+
 /* ================ DELETE ================ */
     const handleDelete = (id) => {
         if(window.confirm("Bạn có chắc trắng muốn xóa ")){ 
-            deleteApi(`user/delete/?id=${id}`).then(function (response) {
-                dispatch(ACTIONS.deleteUser(id))
-              })
+            dispatch(ACTIONS.deleteUser(id))
         }
     } 
 /* ================ DELETE ================ */
-/* ================ CHANGE PAGE ================ */
-    const handlePage = (i) => {
-       setCurrentPage(i)
-    }
-/* ================ Lùi ================ */
-    const handlePrev = () => {
-        currentPage > 1 &&
-        setCurrentPage(currentPage-1)
-    }
-/* ================ tời ================ */
-    const handleNext = () => {
-        currentPage < pageNb.length &&
-        setCurrentPage(currentPage+1)
-    }
-/* ================ CHANGE PAGE ================ */
+
 /* ================ OPPOSITE : ĐẢO NGƯỢC ================ */
     const handleOpposite = () => {
        dispatch(ACTIONS.oppositeUser())
@@ -64,7 +42,7 @@ const User = () => {
 
     return (  
         <div className="container" style={styles.container}>
-        <div className="row">
+          <div className="row">
             <div className="col-12 col-sm-12">
                <h1 style={styles.title}>User</h1> 
             </div>
@@ -78,7 +56,7 @@ const User = () => {
                 <thead>
                   <tr>
                     <th><i className="bi bi-arrow-down-up" onClick={()=>handleOpposite()} style={styles.opposite}></i>
-                        STT
+                        ID
                     </th>
                     <th>Name</th>
                     <th>Phone</th>
@@ -96,20 +74,9 @@ const User = () => {
                         data={data ? data : user} />
                 </tbody>
             </table>
-            <nav aria-label="Page navigation example">
-              <ul className="pagination justify-content-center">  
-              <button className="btn btn-outline-dark" onClick={()=>handlePrev()}>Previous</button>
-               {pageNb && pageNb.map((i,index)=>{
-                return <li key={index} className="page-item">
-                    <button className="btn btn-outline-dark" onClick={()=>handlePage(i)}>{i}</button>
-                    </li>
-                }) 
-                }
-                <button className="btn btn-outline-dark" onClick={()=>handleNext()}>Next</button>
-              </ul>
-            </nav>
-         </div>
-    </div>
+            {page}
+          </div>
+        </div>
     );
 }
 
